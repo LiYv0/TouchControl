@@ -26,42 +26,6 @@ TouchControlApp/
 └── build-apk.ps1                          # 构建脚本
 ```
 
-## 构建方法
-
-### 方法一：使用 Android Studio（推荐）
-
-1. 打开 Android Studio
-2. 选择 "Open an Existing Project"
-3. 选择 `d:\BaiduNetdiskDownload\text\liyu\TouchControlApp` 目录
-4. 等待 Gradle 同步完成
-5. 点击菜单 `Build` > `Build Bundle(s) / APK(s)` > `Build APK(s)`
-6. 生成的 APK 位置：`app\build\outputs\apk\release\app-release.apk`
-
-### 方法二：使用命令行
-
-1. 确保已安装 Gradle 并配置好环境变量
-2. 打开 PowerShell，进入项目目录
-3. 运行：`gradle assembleRelease`
-4. 生成的 APK 位置：`app\build\outputs\apk\release\app-release.apk`
-
-### 方法三：使用提供的脚本
-
-```powershell
-cd d:\BaiduNetdiskDownload\text\liyu\TouchControlApp
-.\build-apk.ps1
-```
-
-## 签名 APK
-
-生成的 APK 是未签名的，需要签名后才能安装：
-
-```powershell
-# 使用 jarsigner 签名
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore app-release-unsigned.apk alias_name
-
-# 或使用 apksigner（推荐）
-apksigner sign --ks my-release-key.keystore --out app-release-signed.apk app-release-unsigned.apk
-```
 
 ## 安装方法
 
