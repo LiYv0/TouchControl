@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TouchControl</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .toggle-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-item:hover {
+            background: #e9ecef;
+        }
+
+        .toggle-label {
+            flex: 1;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 30px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 24px;
+            width: 24px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #667eea;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(30px);
+        }
+
+        .app-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .app-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .app-item:hover {
+            background: #e9ecef;
+        }
+
+        .app-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .app-info {
+            flex: 1;
+        }
+
+        .app-name {
+            font-size: 15px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .app-package {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .status-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .status-bar h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .status-bar p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .tab-container {
+            margin-bottom: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .info-card {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-card p {
+            font-size: 14px;
+            color: #1976d2;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="app-title">TouchControl</h1>
+            <p id="app-desc">模块全程 AI 开发</p>
+        </div>
+
+        <div class="status-bar">
+            <h3 id="status-title">模块状态</h3>
+            <p id="status-text">正在加载...</p>
+        </div>
+
+        <div class="info-card">
+            <p id="info-text">默认情况下，所有模拟触摸和无障碍功能都被禁止。您可以在下方配置允许哪些应用使用这些功能。</p>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="mock-touch" id="tab-mock-touch">模拟触摸</div>
+            <div class="tab" data-tab="accessibility" id="tab-accessibility">无障碍</div>
+        </div>
+
+        <div class="tab-content active" id="content-mock-touch">
+            <div class="section">
+                <div class="section-title" id="global-settings-title">全局设置</div>
+                <div class="toggle-item">
+                    <span class="toggle-label" id="allow-mock-touch-label">允许模拟触摸</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="allow-mock-touch">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title" id="app-list-title">应用列表</div>
+                <div class="app-list" id="mock-touch-app-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <div id="loading-text">正在加载应用列表...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="content-accessibility">
+            <div class="section">
+                <div class="section-title" id="global-settings-title-a11y">全局设置</div>
+                <div class="toggle-item">
+                    <span class="toggle-label" id="allow-accessibility-label">允许无障碍服务</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="allow-accessibility">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title" id="app-list-title-a11y">应用列表</div>
+                <div class="app-list" id="accessibility-app-list">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <div id="loading-text-a11y">正在加载应用列表...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script type="module">
+        import { exec } from 'kernelsu';
+
+        const translations = {
+            zh: {
+                appTitle: 'TouchControl',
+                appDesc: '模块全程 AI 开发',
+                statusTitle: '模块状态',
+                statusText: '运行中',
+                infoText: '默认情况下，所有模拟触摸和无障碍功能都被禁止。您可以在下方配置允许哪些应用使用这些功能。',
+                tabMockTouch: '模拟触摸',
+                tabAccessibility: '无障碍',
+                globalSettings: '全局设置',
+                globalSettingsA11y: '全局设置',
+                allowMockTouch: '允许模拟触摸',
+                allowAccessibility: '允许无障碍服务',
+                appList: '应用列表',
+                appListA11y: '应用列表',
+                loading: '正在加载应用列表...',
+                loadingA11y: '正在加载应用列表...',
+                saved: '设置已保存',
+                error: '保存失败'
+            },
+            en: {
+                appTitle: 'TouchControl',
+                appDesc: 'Module fully developed by AI',
+                statusTitle: 'Module Status',
+                statusText: 'Running',
+                infoText: 'By default, all mock touch and accessibility features are disabled. You can configure which apps are allowed to use these features below.',
+                tabMockTouch: 'Mock Touch',
+                tabAccessibility: 'Accessibility',
+                globalSettings: 'Global Settings',
+                globalSettingsA11y: 'Global Settings',
+                allowMockTouch: 'Allow Mock Touch',
+                allowAccessibility: 'Allow Accessibility',
+                appList: 'App List',
+                appListA11y: 'App List',
+                loading: 'Loading app list...',
+                loadingA11y: 'Loading app list...',
+                saved: 'Settings saved',
+                error: 'Failed to save'
+            }
+        };
+
+        let currentLang = 'zh';
+        let installedApps = [];
+
+        function detectLanguage() {
+            const userLang = navigator.language || navigator.userLanguage;
+            return userLang.startsWith('zh') ? 'zh' : 'en';
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+
+            document.getElementById('app-title').textContent = t.appTitle;
+            document.getElementById('app-desc').textContent = t.appDesc;
+            document.getElementById('status-title').textContent = t.statusTitle;
+            document.getElementById('status-text').textContent = t.statusText;
+            document.getElementById('info-text').textContent = t.infoText;
+            document.getElementById('tab-mock-touch').textContent = t.tabMockTouch;
+            document.getElementById('tab-accessibility').textContent = t.tabAccessibility;
+            document.getElementById('global-settings-title').textContent = t.globalSettings;
+            document.getElementById('global-settings-title-a11y').textContent = t.globalSettingsA11y;
+            document.getElementById('allow-mock-touch-label').textContent = t.allowMockTouch;
+            document.getElementById('allow-accessibility-label').textContent = t.allowAccessibility;
+            document.getElementById('app-list-title').textContent = t.appList;
+            document.getElementById('app-list-title-a11y').textContent = t.appListA11y;
+            document.getElementById('loading-text').textContent = t.loading;
+            document.getElementById('loading-text-a11y').textContent = t.loadingA11y;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        async function getConfig(key) {
+            try {
+                const result = await exec(`ksud module config get ${key}`);
+                return result.stdout.trim() === 'true';
+            } catch (error) {
+                return false;
+            }
+        }
+
+        async function setConfig(key, value) {
+            try {
+                await exec(`ksud module config set ${key} ${value}`);
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        async function loadApps() {
+            try {
+                const result = await exec('pm list packages -3');
+                const packages = result.stdout.split('\n').filter(line => line.trim());
+
+                installedApps = packages.map(pkg => {
+                    const packageName = pkg.replace('package:', '').trim();
+                    return {
+                        package: packageName,
+                        name: packageName.split('.').pop()
+                    };
+                }).filter(app => app.package);
+
+                return installedApps;
+            } catch (error) {
+                console.error('Failed to load apps:', error);
+                return [];
+            }
+        }
+
+        function renderAppList(apps, type) {
+            const container = document.getElementById(`${type}-app-list`);
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            apps.forEach(app => {
+                const appItem = document.createElement('div');
+                appItem.className = 'app-item';
+
+                const initial = app.name.charAt(0).toUpperCase();
+
+                appItem.innerHTML = `
+                    <div class="app-icon">${initial}</div>
+                    <div class="app-info">
+                        <div class="app-name">${app.name}</div>
+                        <div class="app-package">${app.package}</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" 
+                               data-package="${app.package}" 
+                               data-type="${type}"
+                               onchange="handleAppToggle(this)">
+                        <span class="slider"></span>
+                    </label>
+                `;
+
+                container.appendChild(appItem);
+            });
+        }
+
+        async function handleAppToggle(checkbox) {
+            const packageName = checkbox.dataset.package;
+            const type = checkbox.dataset.type;
+            const configKey = type === 'mock-touch' ? `mock_touch_${packageName}` : `accessibility_${packageName}`;
+
+            const success = await setConfig(configKey, checkbox.checked);
+
+            if (success) {
+                showToast(translations[currentLang].saved);
+            } else {
+                checkbox.checked = !checkbox.checked;
+                showToast(translations[currentLang].error);
+            }
+        }
+
+        async function init() {
+            const lang = detectLanguage();
+            setLanguage(lang);
+
+            const mockTouchEnabled = await getConfig('allow_mock_touch');
+            const accessibilityEnabled = await getConfig('allow_accessibility');
+
+            document.getElementById('allow-mock-touch').checked = mockTouchEnabled;
+            document.getElementById('allow-accessibility').checked = accessibilityEnabled;
+
+            document.getElementById('allow-mock-touch').addEventListener('change', async (e) => {
+                const success = await setConfig('allow_mock_touch', e.target.checked);
+                showToast(success ? translations[currentLang].saved : translations[currentLang].error);
+            });
+
+            document.getElementById('allow-accessibility').addEventListener('change', async (e) => {
+                const success = await setConfig('allow_accessibility', e.target.checked);
+                showToast(success ? translations[currentLang].saved : translations[currentLang].error);
+            });
+
+            const apps = await loadApps();
+            renderAppList(apps, 'mock-touch');
+            renderAppList(apps, 'accessibility');
+
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    const tabName = tab.dataset.tab;
+                    document.getElementById(`content-${tabName}`).classList.add('active');
+                });
+            });
+        }
+
+        window.handleAppToggle = handleAppToggle;
+
+        init();
+    </script>
+</body>
+
+</html>
