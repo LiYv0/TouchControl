@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-TouchControl 是一个 KernelSU/Magisk 模块https://github.com/LiYv0/TouchControl/tree/TouchControlModule + Android 管理器 App 组合，用于管理模拟触摸和无障碍服务的权限。
+TouchControl 是一个 KernelSU/Magisk 模块https://github.com/LiYv0/TouchControl/tree/TouchControlModule + Android 管理器 https://github.com/LiYv0/TouchControl/tree/TouchControlApp 组合，用于管理模拟触摸和无障碍服务的权限。
 
 **特性**:
 - ✅ 默认禁止所有模拟触摸和无障碍服务
