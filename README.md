@@ -86,11 +86,6 @@ TouchControlModule/
 
 输出文件: `TouchControl-v1.0.zip`
 
-## 签名信息
-
-模块已使用以下签名者签名:
-- **Signer**: Liyu2215
-
 ## 作者信息
 
 - **作者**: 离不开的雨 (github@LiYv0)
