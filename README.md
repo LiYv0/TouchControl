@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-TouchControl 是一个 KernelSU/Magisk 模块https://github.com/LiYv0/TouchControl/tree/TouchControlModule + Android 管理器 https://github.com/LiYv0/TouchControl/tree/TouchControlApp 组合，用于管理模拟触摸和无障碍服务的权限。
+TouchControl 是一个 KernelSU/Magisk 模块 + Android 管理器 app 组合，用于管理模拟触摸和无障碍服务的权限。
 
 **特性**:
 - ✅ 默认禁止所有模拟触摸和无障碍服务
@@ -15,60 +15,33 @@ TouchControl 是一个 KernelSU/Magisk 模块https://github.com/LiYv0/TouchContr
 ## 文件位置
 
 ### 模块文件
-- **位置**: `d:\BaiduNetdiskDownload\text\模块\`
+- **位置**: `https://github.com/LiYv0/TouchControl/tree/TouchControlModule`
   - `TouchControl-signed.zip` - 已签名的模块（可直接刷入）
   - `build-module.ps1` - 模块打包脚本
   - `sign-module.ps1` - 模块签名脚本
 
 ### 源代码
-- **模块源码**: `d:\BaiduNetdiskDownload\text\liyu\TouchControlModule\`
+- **模块源码**: `https://github.com/LiYv0/TouchControl/tree/TouchControlModule`
   - `module.prop` - 模块配置
   - `post-fs-data.sh` - 启动脚本
   - `service.sh` - 服务脚本
   - `action.sh` - 自定义操作脚本（支持打开管理器）
   - `webroot/index.html` - WebUI（备用）
 
-- **App 源码**: `d:\BaiduNetdiskDownload\text\liyu\TouchControlApp\`
+- **App 源码**: `https://github.com/LiYv0/TouchControl/tree/TouchControlApp`
   - 完整的 Android Studio 项目
   - 包含所有 Java 代码和资源文件
 
 ## 安装步骤
 
-### 1. 构建管理器 App
 
-**方法 A: 使用 Android Studio**
-```
-1. 打开 Android Studio
-2. 打开项目：d:\BaiduNetdiskDownload\text\liyu\TouchControlApp
-3. Build > Build Bundle(s) / APK(s) > Build APK(s)
-4. 获取 APK: app/build/outputs/apk/release/app-release.apk
-```
-
-**方法 B: 使用 Gradle 命令行**
-```powershell
-cd d:\BaiduNetdiskDownload\text\liyu\TouchControlApp
-gradle assembleRelease
-```
-
-### 2. 签名 APK（可选）
-
-如果 APK 未签名，使用以下命令签名：
-```bash
-apksigner sign --ks my-release-key.keystore --out TouchControlManager-signed.apk app-release.apk
-```
-
-### 3. 安装管理器 App
+### 1. 安装管理器 App
 
 ```bash
 adb install TouchControlManager.apk
 ```
 
-### 4. 刷入模块
-
-1. 将 `TouchControl-signed.zip` 刷入 KernelSU 或 Magisk
-2. 重启设备
-
-### 5. 打开管理器
+### 2. 打开管理器
 
 **方式 1**: 点击 App 图标打开
 
