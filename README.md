@@ -15,7 +15,7 @@ TouchControl 是一个 KernelSU/Magisk 模块 + Android 管理器 app 组合，�
 ## 文件位置
 
 ### 模块文件
-- **位置**: `https://github.com/LiYv0/TouchControl/tree/TouchControlModule`
+- **位置**: `https://github.com/LiYv0/TouchControl/releases/tag/%E6%B5%8B%E8%AF%95%EF%BC%88text%EF%BC%89`
   - `TouchControl-signed.zip` - 已签名的模块（可直接刷入）
   - `build-module.ps1` - 模块打包脚本
   - `sign-module.ps1` - 模块签名脚本
